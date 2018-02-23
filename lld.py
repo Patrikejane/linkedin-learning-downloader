@@ -92,17 +92,20 @@ if __name__ == '__main__':
         invalid_file_chars = r'[\\/*?:.,"\'<>|]'
         course_name = r.json()['elements'][0]['title']
         course_name = re.sub(invalid_file_chars, " ", course_name).strip().encode('utf-8')
+        course_name = course_name.replace(u'\xa0', u' ')
         chapters = r.json()['elements'][0]['chapters']
         print '[*] Parsing "%s" course\'s chapters' % course_name
         print '[*] [%d chapters found]' % len(chapters)
         for chapter in chapters:
-            chapter_name = re.sub(invalid_file_chars, " ", chapter['title'])
+            chapter_name = re.sub(invalid_file_chars, " ", chapter['title']).strip().encode('utf-8')
+            chapter_name = chapter_name.replace(u'\xa0', u' ')
             videos = chapter['videos']
             vc = 0
             print '[*] --- Parsing "%s" chapters\'s videos' % chapter_name
             print '[*] --- [%d videos found]' % len(videos)
             for video in videos:
                 video_name = re.sub(invalid_file_chars, " ", video['title']).strip().encode('utf-8')
+                video_name = video_name.replace(u'\xa0', u' ')
                 video_slug = video['slug']
                 video_url = 'https://www.linkedin.com/learning-api/detailedCourses' \
                             '?addParagraphsToTranscript=false&courseSlug={0}&q=slugs&resolution=_720&videoSlug={1}'\
